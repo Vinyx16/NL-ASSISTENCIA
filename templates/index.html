@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NL Assistência Técnica</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-wrench"></i>
+                    </div>
+                    <h1>NL Assistência Técnica</h1>
+                </div>
+                <div class="user-section">
+                    <span class="welcome-text">Bem-vindo</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="content-grid">
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <div class="sidebar-content">
+                        <h2 class="sidebar-title">Navegação</h2>
+                        <nav class="sidebar-nav">
+                            <ul>
+                                <li>
+                                    <button class="nav-btn active" data-section="cadastro">
+                                        <i class="fas fa-user-plus"></i>
+                                        <span>Cadastro de Cliente</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="nav-btn" data-section="os">
+                                        <i class="fas fa-file-text"></i>
+                                        <span>Ordem de Serviço</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="nav-btn" data-section="garantia">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span>Garantia</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="nav-btn" data-section="relatorio">
+                                        <i class="fas fa-users"></i>
+                                        <span>Relatório</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="nav-btn" data-section="dashboard">
+                                        <i class="fas fa-chart-bar"></i>
+                                        <span>Painel Dashboard</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="sidebar-info">
+                            <div class="info-box">
+                                <h3><i class="fas fa-info-circle"></i> Informações</h3>
+                                <p>Sistema de gestão para assistência técnica com cadastro de clientes, ordens de serviço e garantias.</p>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Content Area -->
+                <div class="content-area">
+                    <!-- Cadastro de Cliente -->
+                    <section id="cadastro" class="section active">
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h2><i class="fas fa-user-plus"></i> Cadastro de Cliente</h2>
+                                <span class="badge badge-success"><i class="fas fa-plus"></i> Novo</span>
+                            </div>
+                            <form id="cadastroForm" class="form-grid">
+                                <div class="form-group">
+                                    <label for="nome">Nome Completo</label>
+                                    <input type="text" id="nome" name="nome" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="endereco">Endereço</label>
+                                    <input type="text" id="endereco" name="endereco" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="telefone">Telefone</label>
+                                    <input type="tel" id="telefone" name="telefone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">E-mail</label>
+                                    <input type="email" id="email" name="email">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary" onclick="limparFormulario('cadastroForm')">
+                                        <i class="fas fa-times"></i> Limpar
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-save"></i> Cadastrar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                    <!-- Ordem de Serviço -->
+                    <section id="os" class="section">
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h2><i class="fas fa-file-text"></i> Ordem de Serviço</h2>
+                                <div class="section-actions">
+                                    <button type="button" class="btn btn-info btn-sm" onclick="abrirModalOS()">
+                                        <i class="fas fa-folder-open"></i> Abrir
+                                    </button>
+                                    <span class="badge badge-primary">OS: <span id="osNumber">001</span></span>
+                                </div>
+                            </div>
+                            <form id="osForm" class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="osCliente">Nome do Cliente</label>
+                                    <div class="input-with-dropdown">
+                                        <input type="text" id="osCliente" name="cliente" placeholder="Digite ou selecione um cliente" required>
+                                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                                        <div class="dropdown-list" id="clienteDropdown"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="osStatus">Status</label>
+                                    <select id="osStatus" name="status" required>
+                                        <option value="">Selecione o status</option>
+                                        <option value="aberto">Aberto</option>
+                                        <option value="em_andamento">Em Andamento</option>
+                                        <option value="autorizado">Autorizado</option>
+                                        <option value="concluido">Concluído</option>
+                                        <option value="suspenso">Suspenso</option>
+                                        <option value="cancelado">Cancelado</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="osEndereco">Endereço</label>
+                                    <input type="text" id="osEndereco" name="endereco" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="osTelefone">Telefone</label>
+                                    <input type="tel" id="osTelefone" name="telefone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="osEmail">E-mail</label>
+                                    <input type="email" id="osEmail" name="email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dataAbertura">Data de Abertura</label>
+                                    <input type="date" id="dataAbertura" name="dataAbertura" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dataAutorizacao">Data de Autorização</label>
+                                    <input type="date" id="dataAutorizacao" name="dataAutorizacao">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dataEncerramento">Data de Encerramento</label>
+                                    <input type="date" id="dataEncerramento" name="dataEncerramento">
+                                </div>
+                                <div class="form-group">
+                                    <label for="aparelho">Aparelho</label>
+                                    <input type="text" id="aparelho" name="aparelho" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="marca">Marca</label>
+                                    <input type="text" id="marca" name="marca" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="modelo">Modelo</label>
+                                    <input type="text" id="modelo" name="modelo" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tecnico">Técnico responsável</label>
+                                    <input type="text" id="tecnico" name="tecnico" required>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="defeito">Defeito informado pelo cliente</label>
+                                    <textarea id="defeito" name="defeito" rows="2" required></textarea>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="diagnostico">Diagnóstico técnico</label>
+                                    <textarea id="diagnostico" name="diagnostico" rows="2" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pagamento">Condições de pagamento</label>
+                                    <select id="pagamento" name="pagamento" required>
+                                        <option value="">Selecione a forma de pagamento</option>
+                                        <option value="dinheiro">Dinheiro</option>
+                                        <option value="cartao">Cartão</option>
+                                        <option value="pix">PIX</option>
+                                        <option value="outro">Outro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="valor">Valor (R$)</label>
+                                    <input type="number" id="valor" name="valor" step="0.01" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="parcelas">Nº de parcelas</label>
+                                    <input type="number" id="parcelas" name="parcelas" min="1" max="12" value="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="total">Valor por Parcela (R$)</label>
+                                    <input type="text" id="total" name="total" readonly class="readonly">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary" onclick="limparFormulario('osForm')">
+                                        <i class="fas fa-times"></i> Limpar
+                                    </button>
+                                    <button type="button" class="btn btn-success" onclick="enviarWhatsApp('os')">
+                                        <i class="fab fa-whatsapp"></i> Enviar pro WhatsApp
+                                    </button>
+                                    <div class="dropdown-print">
+                                        <button type="button" class="btn btn-info" onclick="togglePrintDropdown()">
+                                            <i class="fas fa-print"></i> Imprimir
+                                        </button>
+                                        <div class="dropdown-menu" id="printDropdown">
+                                            <button type="button" onclick="gerarPDF()">
+                                                <i class="fas fa-file-pdf"></i> Gerar PDF
+                                            </button>
+                                            <button type="button" onclick="imprimirOS()">
+                                                <i class="fas fa-print"></i> Imprimir
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Salvar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                    <!-- Garantia -->
+                    <section id="garantia" class="section">
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h2><i class="fas fa-shield-alt"></i> Garantia</h2>
+                                <span class="badge badge-warning"><i class="fas fa-exclamation-circle"></i> Registro</span>
+                            </div>
+                            <form id="garantiaForm" class="form-grid">
+                                <div class="form-group">
+                                    <label for="garantiaNome">Nome Completo</label>
+                                    <input type="text" id="garantiaNome" name="nome" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="garantiaTelefone">Telefone</label>
+                                    <input type="tel" id="garantiaTelefone" name="telefone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="garantiaOS">Nº da OS</label>
+                                    <div class="input-with-dropdown">
+                                        <input type="text" id="garantiaOS" name="osNumero" placeholder="Digite ou selecione uma OS" required>
+                                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                                        <div class="dropdown-list" id="osDropdown"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cobertura">Cobertura</label>
+                                    <select id="cobertura" name="cobertura" required>
+                                        <option value="">Selecione a cobertura</option>
+                                        <option value="fabrica">Fábrica</option>
+                                        <option value="assistencia">Assistência Técnica</option>
+                                        <option value="terceirizada">Terceirizada</option>
+                                    </select>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="pecas">Descrição das Peças</label>
+                                    <textarea id="pecas" name="pecas" rows="2" required></textarea>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="contrato">Contrato de Garantia</label>
+                                    <textarea id="contrato" name="contrato" rows="4" required></textarea>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary" onclick="limparFormulario('garantiaForm')">
+                                        <i class="fas fa-times"></i> Limpar
+                                    </button>
+                                    <button type="button" class="btn btn-success" onclick="enviarWhatsApp('garantia')">
+                                        <i class="fab fa-whatsapp"></i> Enviar pro WhatsApp
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Salvar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                    <!-- Relatório -->
+                    <section id="relatorio" class="section">
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h2><i class="fas fa-users"></i> Relatório de Clientes</h2>
+                                <span class="badge badge-info"><i class="fas fa-chart-line"></i> Análise</span>
+                            </div>
+
+                            <!-- Pesquisa -->
+                            <div class="search-grid">
+                                <div class="search-group">
+                                    <label for="searchNome">Pesquisar por nome:</label>
+                                    <input type="text" id="searchNome">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="search-group">
+                                    <label for="searchOS">Pesquisar por Nº OS:</label>
+                                    <input type="text" id="searchOS">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="search-group">
+                                    <label for="dataInicioRelatorio">Data Início:</label>
+                                    <input type="date" id="dataInicioRelatorio">
+                                </div>
+                                <div class="search-group">
+                                    <label for="dataFimRelatorio">Data Fim:</label>
+                                    <input type="date" id="dataFimRelatorio">
+                                </div>
+                            </div>
+
+                            <!-- Tabela -->
+                            <div class="table-container">
+                                <table id="relatorioTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nº OS</th>
+                                            <th>Nome</th>
+                                            <th>Telefone</th>
+                                            <th>Aparelhos</th>
+                                            <th>Valor Total</th>
+                                            <th>Data</th>
+                                            <th>Status</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="relatorioTableBody">
+                                        <tr class="no-results">
+                                            <td colspan="8">
+                                                <div class="no-results-content">
+                                                    <i class="fas fa-search"></i>
+                                                    <p>Digite um nome, número de OS ou selecione um período para pesquisar</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Dashboard -->
+                    <section id="dashboard" class="section">
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h2><i class="fas fa-chart-bar"></i> Painel Dashboard</h2>
+                            </div>
+
+                            <!-- Controles de Data -->
+                            <div class="dashboard-controls">
+                                <div class="date-range">
+                                    <label for="dataInicio">Data Início:</label>
+                                    <input type="date" id="dataInicio" />
+                                    <label for="dataFim">Data Fim:</label>
+                                    <input type="date" id="dataFim" />
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="updateDashboard()">
+                                        <i class="fas fa-search"></i> Filtrar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Métricas Principais -->
+                            <div class="dashboard-metrics">
+                                <div class="dashboard-card dashboard-blue">
+                                    <div class="dashboard-content">
+                                        <div class="dashboard-info">
+                                            <p>Quantidade Total de OS</p>
+                                            <h3 id="dashTotalOS">0</h3>
+                                            <small>Período selecionado</small>
+                                        </div>
+                                        <i class="fas fa-wrench"></i>
+                                    </div>
+                                </div>
+                                <div class="dashboard-card dashboard-purple">
+                                    <div class="dashboard-content">
+                                        <div class="dashboard-info">
+                                            <p>Clientes Ativos</p>
+                                            <h3 id="dashClientesAtivos">0</h3>
+                                            <small>Com OS no período</small>
+                                        </div>
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                                <div class="dashboard-card dashboard-yellow">
+                                    <div class="dashboard-content">
+                                        <div class="dashboard-info">
+                                            <p>Abertas</p>
+                                            <h3 id="dashAbertas">0</h3>
+                                            <small>OS em aberto</small>
+                                        </div>
+                                        <i class="fas fa-folder-open"></i>
+                                    </div>
+                                </div>
+                                <div class="dashboard-card dashboard-blue-light">
+                                    <div class="dashboard-content">
+                                        <div class="dashboard-info">
+                                            <p>Em Andamento</p>
+                                            <h3 id="dashEmAndamento">0</h3>
+                                            <small>OS em execução</small>
+                                        </div>
+                                        <i class="fas fa-cogs"></i>
+                                    </div>
+                                </div>
+                                <div class="dashboard-card dashboard-purple-light">
+                                    <div class="dashboard-content">
+                                        <div class="dashboard-info">
+                                            <p>Autorizadas</p>
+                                            <h3 id="dashAutorizadas">0</h3>
+                                            <small>OS autorizadas</small>
+                                        </div>
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                </div>
+                                <div class="dashboard-card dashboard-green">
+                                    <div class="dashboard-content">
+                                        <div class="dashboard-info">
+                                            <p>Concluídas</p>
+                                            <h3 id="dashConcluidas">0</h3>
+                                            <small>OS finalizadas</small>
+                                        </div>
+                                        <i class="fas fa-check-double"></i>
+                                    </div>
+                                </div>
+                                <div class="dashboard-card dashboard-orange">
+                                    <div class="dashboard-content">
+                                        <div class="dashboard-info">
+                                            <p>Suspensas</p>
+                                            <h3 id="dashSuspensas">0</h3>
+                                            <small>OS suspensas</small>
+                                        </div>
+                                        <i class="fas fa-pause-circle"></i>
+                                    </div>
+                                </div>
+                                <div class="dashboard-card dashboard-red">
+                                    <div class="dashboard-content">
+                                        <div class="dashboard-info">
+                                            <p>Canceladas</p>
+                                            <h3 id="dashCanceladas">0</h3>
+                                            <small>OS canceladas</small>
+                                        </div>
+                                        <i class="fas fa-times-circle"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification -->
+    <div id="notification" class="notification hidden">
+        <div class="notification-content">
+            <i class="notification-icon"></i>
+            <span class="notification-message"></span>
+            <button class="notification-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Visualizar Ordens de Serviço</h3>
+                <button class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Abrir OS -->
+    <div id="abrirOSModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Abrir Ordem de Serviço</h3>
+                <button class="modal-close" onclick="fecharModalOS()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="selecionarOS">Selecionar OS:</label>
+                    <div class="input-with-dropdown">
+                        <input type="text" id="selecionarOS" placeholder="Digite o número da OS ou nome do cliente">
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                        <div class="dropdown-list" id="selecionarOSDropdown"></div>
+                    </div>
+                </div>
+                <div id="osDetalhes" class="os-details-container" style="display: none;">
+                    <div class="os-card">
+                        <div class="os-card-header">
+                            <div class="os-number" id="osNumeroSelecionada"></div>
+                            <div class="form-group status-update">
+                                <label for="novoStatus">Atualizar Status:</label>
+                                <select id="novoStatus">
+                                    <option value="aberto">Aberto</option>
+                                    <option value="em_andamento">Em Andamento</option>
+                                    <option value="autorizado">Autorizado</option>
+                                    <option value="concluido">Concluído</option>
+                                    <option value="suspenso">Suspenso</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="os-details" id="detalhesOSSelecionada">
+                            <!-- Detalhes serão preenchidos via JavaScript -->
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="fecharModalOS()">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="atualizarStatusOS()">
+                                <i class="fas fa-save"></i> Atualizar Status
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
